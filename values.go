@@ -20,9 +20,9 @@ const asciiArt string = `
 &&&&&&&&&&&                       \/       \/      \/           
 `;
 
-const version string = "0.0.1"
+const version string = "beta 0.1"
 
-const signature string = "LOCKED BY LOCKER " + version;
+const signature string = "LOCKED BY LOCKER " + version + "\n";
 
 const configPath string = "./config.json";
 

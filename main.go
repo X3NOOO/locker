@@ -54,7 +54,7 @@ func main(){
 				break;
 			case "unlock":
 				log.Print("Going to unlock func");
-				unlock(filename);
+				unlock(filename, password);
 				break;
 			default:
 				log.Print("Going to help func");

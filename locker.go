@@ -49,7 +49,7 @@ func encrypt(filename string, key []byte){
 	log.Print("file data: ", string(file));
 	mod := getMod(filename);
 	// filedata = mod + file
-	fileData := padding(append([]byte(string(mod)), file...), aesBlock.BlockSize());
+	fileData := padding(file, aesBlock.BlockSize());
 	file = nil; //free the memory
 	log.Print("filemode + file: ", string(fileData));
 	
@@ -74,7 +74,7 @@ func encrypt(filename string, key []byte){
 
 			//write signature
 			if(index == 0){
-				if _,err = f.WriteString(signature + "\n"); err != nil {
+				if _,err = f.WriteString(signature); err != nil {
 					log.Fatal(err);
 				}
 			}
@@ -126,16 +126,16 @@ func removeCopies(filename string, start bool){
 	}
 	
 	fmt.Print("Would you like to replace orginal file with locker version? (Y/n): ");
-		var out string;
-		fmt.Scanln(&out);
-		log.Print("replace out: ", out)
-		if(string(out) != "n"){
-			os.Remove(filename);
-			os.Rename(filename + ".locker", filename);
-			changeMod(filename);
-		}else{
-			changeMod(filename + ".locker");
-		}
+	var out string;
+	fmt.Scanln(&out);
+	log.Print("replace out: ", out);
+	if(string(out) != "n"){
+		os.Remove(filename);
+		os.Rename(filename + ".locker", filename);
+		changeMod(filename);
+	}else{
+		changeMod(filename + ".locker");
+	}
 }
 
 func changeMod(filename string){
