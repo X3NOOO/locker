@@ -32,7 +32,7 @@ func main(){
 		var filename string = os.Args[len(os.Args)-1];
 		//check if filename is existing file
 		log.Print("Checking if file exists");
-		if(fileExists(filename)){
+		if _, err := os.Stat(filename); !os.IsNotExist(err){
 			log.Print("Getting password")
 			//get password
 			// fmt.Printf("Enter password to %s: ", filename)													//

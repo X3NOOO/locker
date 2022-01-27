@@ -17,8 +17,8 @@ dunno why i made it, had to learn golang
 - LTC: `Lew3VmzbkaxzoYG3jNHf263oEDMrQ3ecN1`
 
 # todo
-- [ ] changing file permission
-- [ ] encryption
-- [ ] totp
+- [X] changing file permission
+- [X] encryption
 - [ ] dir encryption
+- [ ] totp
 - [ ] windows support (just kidding)

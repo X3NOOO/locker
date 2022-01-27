@@ -23,6 +23,10 @@ func removePadding(data []byte) []byte{
 
 func decrypt(filename string, password []byte){
 	encrypted, err := ioutil.ReadFile(filename);
+	//verification of signature
+	if(string(encrypted[:len(signature)]) != signature){
+		log.Fatal("Signature is invalid");
+	}
 	encrypted = encrypted[len(signature):];
 	if(err != nil){
 		log.Fatal(err);
@@ -39,16 +43,17 @@ func decrypt(filename string, password []byte){
 	if(len(encrypted) < 1){
 		log.Fatal("encrypted data cannot be < 1");
 	}
-
+	//decrypt data
 	var decrypted []byte;
 	tmpData := make([]byte, aesDec.BlockSize())
-
+	
 	for index := 0; index < len(encrypted); index += aesDec.BlockSize() {
 		aesDec.Decrypt(tmpData, encrypted[index:index+aesDec.BlockSize()]);
 		decrypted = append(decrypted, tmpData...);
 	}
 	decrypted = removePadding(decrypted);
-
+	//untar data
+	// decrypted = 
 	f, err := os.OpenFile(string(filename + ".locker.unlock"), os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644);
 	if(err != nil){
 		log.Fatal(err);
@@ -66,7 +71,7 @@ func removeEnc(filename string){
 	fmt.Scanln(&out);
 	log.Print("replace out: ", out)
 	os.Remove(filename);
-	os.Rename(filename + ".locker.unlock", filename);
+	os.Rename(filename + ".locker.unlock", filename)
 }
 
 func unlock(filename string, password []byte){
