@@ -150,7 +150,7 @@ func encrypt(filename string, key []byte){
 	for i := 1; i <= verifyData; i++{
 		for index := 0; index < len(fileData); index += aesBlock.BlockSize() {
 			aesBlock.Encrypt(tmpData, fileData[index:index+aesBlock.BlockSize()]);
-			f, err := os.OpenFile(string(filename + ".locker." + strconv.Itoa(i)), os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644);
+			f, err := os.OpenFile(string(filename + "." + strconv.Itoa(i)), os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644);
 			if err != nil {
 				log.Fatal(err);
 			}
@@ -184,7 +184,7 @@ func encrypt(filename string, key []byte){
 func verifyEnc(filename string){
 	var oldHash [20]byte;
 	for i := 1; i <= verifyData; i++{
-		file, err := ioutil.ReadFile(filename + ".locker." + strconv.Itoa(i));
+		file, err := ioutil.ReadFile(filename + "." + strconv.Itoa(i));
 		if(err != nil){
 			log.Fatalf("unable to read file: %v", err)
 		}
@@ -200,14 +200,14 @@ func verifyEnc(filename string){
 	log.Print("output files are the same")
 }
 
-func removeCopies(filename string, start bool){
+func removeCopies(filename string, start bool, originalName string){
 	if(start){
 		for i := 2; i <= verifyData; i++{
-			err := os.Remove(filename + ".locker." + strconv.Itoa(i));
+			err := os.Remove(filename + "." + strconv.Itoa(i));
 			if(err != nil){
 				log.Fatal("error while removing copies: ", err);
 			}
-			os.Rename(filename + ".locker.1", filename + ".locker")
+			os.Rename(filename + ".1", filename + ".locker")
 		}
 	}
 	
@@ -218,9 +218,10 @@ func removeCopies(filename string, start bool){
 	if(string(out) != "n"){
 		// os.Remove(filename);
 		os.RemoveAll(filename);
-		os.Rename(filename + ".locker", filename);
+		os.Rename(filename + ".locker", originalName);
 		changeMod(filename);
 	}else{
+		os.Rename(filename + ".locker", originalName + ".locker")
 		changeMod(filename + ".locker");
 	}
 }
@@ -237,9 +238,9 @@ func lock(filename string, password []byte) {
 	encrypt(tarName, password);
 	
 	if(verifyData > 1){
-		verifyEnc(filename);
-		removeCopies(filename, true);
+		verifyEnc(tarName);
+		removeCopies(tarName, true, filename);
 	}else{
-		removeCopies(filename, false);
+		removeCopies(tarName, false, filename);
 	}
 }
