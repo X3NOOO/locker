@@ -112,6 +112,11 @@ func tarData(filename string) string {
 	return(tarName);
 }
 
+func pause(){
+	//pause program
+	bufio.NewReader(os.Stdin).ReadBytes('\n') ;
+}
+
 func encrypt(filename string, key []byte){
 	// fi, err := os.Stat(filename);
 	// if(err != nil){
@@ -127,8 +132,6 @@ func encrypt(filename string, key []byte){
 	///tar file
 	//create tarball
 	
-	//pause program
-	bufio.NewReader(os.Stdin).ReadBytes('\n') 
 	//read file from filename as fileData, tar data, encrypt it with aes with password key
 	aesBlock, err := aes.NewCipher(key);
 	if(err != nil){
@@ -215,15 +218,17 @@ func removeCopies(filename string, start bool, originalName string){
 	var out string;
 	fmt.Scanln(&out);
 	log.Print("replace out: ", out);
+	fmt.Print(filename)
 	if(string(out) != "n"){
 		// os.Remove(filename);
-		os.RemoveAll(filename);
+		os.RemoveAll(originalName);
 		os.Rename(filename + ".locker", originalName);
-		changeMod(filename);
-	}else{
-		os.Rename(filename + ".locker", originalName + ".locker")
-		changeMod(filename + ".locker");
-	}
+		changeMod(originalName);
+		}else{
+			os.Rename(filename + ".locker", originalName + ".locker")
+			changeMod(filename + ".locker");
+		}
+	os.RemoveAll(filename)
 }
 
 func changeMod(filename string){
