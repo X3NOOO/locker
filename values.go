@@ -22,7 +22,7 @@ const asciiArt string = `
 
 const version string = "beta 0.1"
 
-const signature string = "LOCKED BY LOCKER " + version + "\n";
+const signature string = "locked by locker " + version + "\n";
 
 const configPath string = "./config.json";
 

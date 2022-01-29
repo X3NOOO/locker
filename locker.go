@@ -10,7 +10,7 @@ import (
 	"compress/gzip"
 	"io"
 
-	// "bufio"
+	"bufio"
 	"crypto/aes"
 	"crypto/sha1"
 	"fmt"
@@ -45,25 +45,11 @@ func padding(data []byte, blockSize int) []byte{
 	return append(data, padding...);
 }
 
-func encrypt(filename string, key []byte){
-	//read file from filename as fileData, tar data, encrypt it with aes with password key
-	aesBlock, err := aes.NewCipher(key);
-	if(err != nil){
-		log.Fatal("error while creating aescipher: ", err);
-	}
+func tarData(filename string) string {
 	fi, err := os.Stat(filename);
 	if(err != nil){
 		log.Fatal("error while getting file info: ", err);
 	}
-	//read file to file
-	//log.Printf("Reading %s to file", filename);
-    // file, err := ioutil.ReadFile(filename);
-	// if(err != nil){
-	// 	log.Fatal("error while reading file: ", err);
-	// }
-	// log.Print("file data: ", string(file));
-	///tar file
-	//create tarball
 	tarName := string(filename + ".tar.gz.locker")
 	tarFile, err := os.Create(tarName);
 	if(err != nil){
@@ -121,10 +107,34 @@ func encrypt(filename string, key []byte){
 			return(nil);
 		})
 	}else{
-		log.Fatal("cannot recognize file type")
+		log.Fatal("cannot recognize file type");
 	}
+	return(tarName);
+}
 
-	file, err := ioutil.ReadFile(tarName);
+func encrypt(filename string, key []byte){
+	// fi, err := os.Stat(filename);
+	// if(err != nil){
+		// log.Fatal("error while getting file info: ", err);
+	// }
+	//read file to file
+	//log.Printf("Reading %s to file", filename);
+    // file, err := ioutil.ReadFile(filename);
+	// if(err != nil){
+	// 	log.Fatal("error while reading file: ", err);
+	// }
+	// log.Print("file data: ", string(file));
+	///tar file
+	//create tarball
+	
+	//pause program
+	bufio.NewReader(os.Stdin).ReadBytes('\n') 
+	//read file from filename as fileData, tar data, encrypt it with aes with password key
+	aesBlock, err := aes.NewCipher(key);
+	if(err != nil){
+		log.Fatal("error while creating aescipher: ", err);
+	}
+	file, err := ioutil.ReadFile(filename);
 	log.Printf("tared file: %x", file);
 	if(err != nil){
 		log.Fatal("error while reading tared file: ", err);
@@ -223,7 +233,8 @@ func changeMod(filename string){
 func lock(filename string, password []byte) {
 	log.Println("path: " + filename);
 
-	encrypt(filename, password);
+	tarName := tarData(filename);
+	encrypt(tarName, password);
 	
 	if(verifyData > 1){
 		verifyEnc(filename);
