@@ -18,17 +18,17 @@ const asciiArt string = `
 &&&&' '&&&&  |  |__ (  <_> ) \  \___  |    <  \  ___/   |  | \/
 &&&&& &&&&&  |____/  \____/   \___  > |__|_ \  \___  >  |__|    
 &&&&&&&&&&&                       \/       \/      \/           
-`;
+`
 
 const version string = "beta 0.1"
 
-const signature string = "locked by locker " + version + "\n";
+const signature string = "locked by locker " + version + "\n"
 
-const configPath string = "./config.json";
+const configPath string = "./config.json"
 
-const vaultPath string = "./vault.json";
+const vaultPath string = "./vault.json"
 
 // how many times you want to verify data, 1=off
-const verifyData int = 2;
+const verifyData int = 2
 
-var salt = "DEFAULTPASSWORD";
+var salt = "DEFAULTPASSWORD"
