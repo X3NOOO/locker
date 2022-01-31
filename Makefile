@@ -1,12 +1,8 @@
 release:
 	mkdir bin; \
-        go build -o ./bin/salt ./salt.go; \
-        RAND=$(./bin/salt 32); \
-        echo $$RAND; \
-        sed -i "s/DEFAULTPASSWORD/$$RAND/" values.go; \
+        go run salt.go l 64 values.go; \
 	go build -o ./bin/locker ./locker.go ./main.go ./unlocker.go ./values.go; \
-        # sed -i "s/$$RAND/DEFAULTPASSWORD/" values.go; \
-        rand=0; 
+        go run salt.go u 64 values.go
 
 install:
 	if test `whoami` != "root" ; \

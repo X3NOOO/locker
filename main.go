@@ -13,8 +13,9 @@ import (
 
 func help() {
 	//fmt.Println(os.Args[0])
+	fmt.Println(hello)
 	fmt.Println("Usage:\n\t" + os.Args[0] + " <option> [arguments] file")
-	fmt.Println("\nOptions:\n\thelp\tDisplay this message\n\tlock\tLock directory/file\n\tunlock\tUnlock file/directory")
+	fmt.Println("\nOptions:\n\thelp\tDisplay this message\n\tlock\tLock directory/file\n\tunlock\tUnlock file/directory\n\tlicense\tDisplay license")
 	fmt.Println("\nArguments:\n\t--debug <true/false>\tShow debug messages\n\t--default-config\tUse default config")
 }
 
@@ -50,15 +51,15 @@ func main() {
 			// fmt.Print(password)
 			switch os.Args[1] {
 			case "lock":
-				log.Print("Going to lock func")
+				log.Print("Going to lock func 1")
 				lock(filename, password)
 				break
 			case "unlock":
-				log.Print("Going to unlock func")
+				log.Print("Going to unlock func 2")
 				unlock(filename, password)
 				break
 			default:
-				log.Print("Going to help func")
+				log.Print("Going to help func 3")
 				help()
 				break
 			}
@@ -66,9 +67,11 @@ func main() {
 			log.Fatalf("%s does not exist or it's not a file", filename)
 		}
 	} else if len(os.Args) == 1 {
-		fmt.Println("Locker") //TODO add here ascii art and other stuff
+		fmt.Println(hello) 
+	} else if(os.Args[1] == "license"){
+		fmt.Println(license)
 	} else {
-		log.Print("Going to help func")
+		log.Print("Going to help func 4")
 		help()
 	}
 
