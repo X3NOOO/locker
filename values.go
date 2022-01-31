@@ -25,7 +25,7 @@ const version string = "1.0"
 const signature string = "locked by locker " + version + "\n"
 
 const hello string = asciiArt + "\n" + "https://github.com/X3NOOO/locker\n" + "Copyright (C) 2022 X3NO <X3NO@disroot.org> [https://X3NO.ct8.pl] [https://github.com/X3NOOO]" + "\n" + `
-locker is program for locking files released under GNU GPL v3 license.
+locker is cli program for locking files and folders released under GNU GPL v3 license.
 `
 
 const license string = `
