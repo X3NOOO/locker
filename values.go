@@ -20,7 +20,7 @@ const asciiArt string = `
 &&&&&&&&&&&                       \/       \/      \/           
 `
 
-const version string = "beta 0.1"
+const version string = "1.0"
 
 const signature string = "locked by locker " + version + "\n"
 
@@ -31,4 +31,4 @@ const vaultPath string = "./vault.json"
 // how many times you want to verify data, 1=off
 const verifyData int = 2
 
-var salt = "DEFAULTPASSWORD"
+var salt = "DEFAULTPASS"
