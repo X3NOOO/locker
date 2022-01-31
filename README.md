@@ -1,8 +1,6 @@
 # locker
 
-locker is autistic program for locking files
-
-dunno why i made it, had to learn golang
+locker is cli program for locking files and folders
 
 ## installation
 

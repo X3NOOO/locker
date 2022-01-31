@@ -141,12 +141,13 @@ func addrw(filename string){
 }
 
 func unlock(filename string, password []byte) {
+	log.SetOutput(ioutil.Discard)
 	log.Println("path: " + filename)
 	addrw(filename)
 	decrypt(filename, password)
 	untar(string(filename+".locker.unlock"))
 	os.RemoveAll(string(filename+".locker.unlock"))
 	removeEnc(filename)
-	addrw(filename[:len(".locker")])
+	os.Chmod(filename[:len(".locker")], 0744)
 	// getInfo(filename)
 }

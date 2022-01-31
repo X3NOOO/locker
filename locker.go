@@ -220,7 +220,7 @@ func removeCopies(filename string, start bool, originalName string) {
 	var out string
 	fmt.Scanln(&out)
 	log.Print("replace out: ", out)
-	fmt.Print(filename)
+	// fmt.Print(filename)
 	if string(out) == "y" || string(out) == "Y"{
 		// os.Remove(filename)
 		os.RemoveAll(originalName)
@@ -248,6 +248,7 @@ func changeMod(filename string) {
 }
 
 func lock(filename string, password []byte) {
+	log.SetOutput(ioutil.Discard)
 	log.Println("path: " + filename)
 
 	tarName := tarData(filename)

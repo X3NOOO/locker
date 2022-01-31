@@ -3,13 +3,14 @@ package main
 import (
 	"fmt"
 	"log"
-
+	"io/ioutil"
 	//"bufio"
 	"crypto/sha256"
 	"os"
 	// "golang.org/x/term"	//TODO uncomment
 	// "syscall"			//
 )
+
 
 func help() {
 	//fmt.Println(os.Args[0])
@@ -28,6 +29,7 @@ func fileExists(filename string) bool {
 }
 
 func main() {
+	log.SetOutput(ioutil.Discard)
 	//if option is passed do something, if not return help
 	if len(os.Args) > 2 {
 		//filename = last args
