@@ -12,11 +12,12 @@
 
 locker is cli program for locking files and folders.
 
-[![video](https://raw.githubusercontent.com/X3NOOO/EasyCrypt/dev/vid.mp4)]
+https://user-images.githubusercontent.com/48159366/151880905-26bed182-4fb2-494b-ba1b-340bbe856632.mov
 
 ## features
 
 - Every installation have randomized master password. Even if someone can copy your files won't be able to unlock them
+- Files are tared before encryption so you can lock the folder as well
 
 ## installation
 
