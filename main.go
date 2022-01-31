@@ -7,8 +7,8 @@ import (
 	//"bufio"
 	"crypto/sha256"
 	"os"
-	// "golang.org/x/term"	//TODO uncomment
-	// "syscall"			//
+	"golang.org/x/term"	//TODO uncomment
+	"syscall"			//
 )
 
 
@@ -39,15 +39,17 @@ func main() {
 		if _, err := os.Stat(filename); !os.IsNotExist(err) {
 			log.Print("Getting password")
 			//get password
-			// fmt.Printf("Enter password to %s: ", filename)													//
-			// userpass, err := term.ReadPassword(int(syscall.Stdin));											//
-			// if(err != nil){																					//
-			// 	log.Fatal(err)																					//TODO uncomment for release
-			// }																								//
+			fmt.Printf("Enter password to %s: ", filename)													//
+			userpass, err := term.ReadPassword(int(syscall.Stdin));											//
+			if(err != nil){																					//
+				log.Fatal(err)																					//TODO uncomment for release
+			}																								//
+			fmt.Print("\n")
+			// fmt.Print(userpass)
 			// combinate userpass with salt to make file ununlockable without locker even if user know password	and use it in md5 form
-			// var passwordString string = string(userpass) + salt;												//
-			// var password = sha356.Sum256([]byte(passwordString));															//
-			password32 := sha256.Sum256([]byte("haslo"))
+			var passwordString string = string(userpass) + salt;												//
+			var password32 = sha256.Sum256([]byte(passwordString));															//
+			// password32 := sha256.Sum256([]byte("haslo"))
 			password := []byte(password32[:])
 
 			// fmt.Print(password)

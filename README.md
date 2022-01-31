@@ -1,6 +1,22 @@
 # locker
 
-locker is cli program for locking files and folders
+```
+  /&&&&&\    
+ &&/   \&&   .__                       __
+ &&.. ..&&   |  |     ____     ____   |  | __   ____   _______
+&&&&&&&&&&&  |  |    /  _ \  _/ ___\  |  |/ / _/ __ \  \_  __ \
+&&&&' '&&&&  |  |__ (  <_> ) \  \___  |    <  \  ___/   |  | \/
+&&&&& &&&&&  |____/  \____/   \___  > |__|_ \  \___  >  |__|    
+&&&&&&&&&&&                       \/       \/      \/           
+```
+
+locker is cli program for locking files and folders.
+
+[![video](https://raw.githubusercontent.com/X3NOOO/EasyCrypt/dev/vid.mp4)]
+
+## features
+
+- Every installation have randomized master password. Even if someone can copy your files won't be able to unlock them
 
 ## installation
 
