@@ -72,15 +72,12 @@ func main() {
 			// fmt.Print(password)
 			switch os.Args[len(os.Args)-2] {
 			case "lock":
-				log.Print("Going to lock func 1")
 				lock(filename, password)
 				break
 			case "unlock":
-				log.Print("Going to unlock func 2")
 				unlock(filename, password)
 				break
 			default:
-				log.Print("Going to help func 3")
 				help()
 				break
 			}
@@ -88,11 +85,11 @@ func main() {
 			log.Fatalf("%s does not exist or it's not a file", filename)
 		}
 	} else if len(os.Args) == 1 {
-		fmt.Println(hello) 
+		fmt.Print(hello)
+		fmt.Println("For more information type \"locker help\"")
 	} else if(os.Args[1] == "license"){
 		fmt.Println(license)
 	} else {
-		log.Print("Going to help func 4")
 		help()
 	}
 	exec.Command("bash", "-c", string("ulimit -n " + ulimit))

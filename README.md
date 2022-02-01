@@ -16,7 +16,7 @@ https://user-images.githubusercontent.com/48159366/151880905-26bed182-4fb2-494b-
 
 ## features
 
-- Every installation have randomized master password. Even if someone copies your files they will not be able to unlock them. 
+- Every installation have randomized master password. Even if someone copies your files they will not be able to unlock them.
 - Files are tared before encryption so you can lock the folder as well
 
 ## installation
@@ -25,6 +25,14 @@ https://user-images.githubusercontent.com/48159366/151880905-26bed182-4fb2-494b-
 2. `cd locker`
 3. `make release`
 4. `make install`
+
+## usage
+
+- `locker`          - Display basic information
+- `locker help`     - Display help message
+- `locker lock`     - Lock directory/file
+- `locker unlock`   - Unlock file/directory
+- `locker license`  - Display GNU GPL v3 license
 
 ## donation
 
