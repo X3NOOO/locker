@@ -20,7 +20,7 @@ const asciiArt string = `
 &&&&&&&&&&&                       \/       \/      \/           
 `
 
-const version string = "1.0"
+const version string = "1.1"
 
 const signature string = "locked by locker " + version + "\n"
 
