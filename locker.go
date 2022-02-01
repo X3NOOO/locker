@@ -82,6 +82,7 @@ func tarData(filename string) string {
 		if err != nil {
 			log.Fatal("error while copying file to tar: ", err)
 		}
+		tmp.Close()
 	} else if fi.Mode().IsDir() {
 		log.Print(filename, " is a directory")
 		filepath.Walk(filename, func(file string, fi os.FileInfo, err error) error {
@@ -104,6 +105,7 @@ func tarData(filename string) string {
 				if err != nil {
 					log.Fatal("error while copying file: ", err)
 				}
+				data.Close()
 			}
 			return (nil)
 		})
@@ -158,7 +160,6 @@ func encrypt(filename string, key []byte) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			defer f.Close()
 			//encrypted = append(encrypted, tmpData...)
 			//write encrypted block to {filename}.locker.{i}
 
@@ -173,6 +174,7 @@ func encrypt(filename string, key []byte) {
 			if _, err = f.WriteString(string(tmpData)); err != nil {
 				log.Fatal(err)
 			}
+			f.Close()
 		}
 	}
 	// log.Print("encrypted: ", string(encrypted))

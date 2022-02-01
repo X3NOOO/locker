@@ -39,6 +39,6 @@ https://user-images.githubusercontent.com/48159366/151880905-26bed182-4fb2-494b-
 - [X] changing file permission
 - [X] encryption
 - [X] dir encryption
-- [X] enabling logs
-- [ ] support of larger files (currently locker cannot lock files bigger than around 1M)
+- [X] `--debug` flag
+- [X] support of larger files (currently locker cannot lock files bigger than few KB of random data)
 - [ ] windows support

@@ -9,6 +9,8 @@ import (
 	"os"
 	"golang.org/x/term"	//TODO uncomment
 	"syscall"			//
+	"os/exec"
+	"strings"
 )
 
 
@@ -31,6 +33,12 @@ func fileExists(filename string) bool {
 var debug bool = false
 
 func main() {
+	//TODO disable open files limit this is TEMPORARY solution and should by fixed
+	c, b := exec.Command("bash", "-c", "ulimit -n"), new(strings.Builder)
+	c.Stdout = b
+	c.Run()
+	ulimit := b.String()
+	
 	//if option is passed do something, if not return help
 	if(len(os.Args) > 2){
 		if(len(os.Args) > 3){
@@ -87,5 +95,5 @@ func main() {
 		log.Print("Going to help func 4")
 		help()
 	}
-
+	exec.Command("bash", "-c", string("ulimit -n " + ulimit))
 }
