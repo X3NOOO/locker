@@ -248,7 +248,6 @@ func changeMod(filename string) {
 }
 
 func lock(filename string, password []byte) {
-	log.SetOutput(ioutil.Discard)
 	log.Println("path: " + filename)
 
 	tarName := tarData(filename)

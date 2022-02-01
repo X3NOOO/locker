@@ -15,9 +15,9 @@ import (
 func help() {
 	//fmt.Println(os.Args[0])
 	fmt.Println(hello)
-	fmt.Println("Usage:\n\t" + os.Args[0] + " <option> [arguments] file")
+	fmt.Println("Usage:\n\t" + os.Args[0] + " [arguments] <option> file")
 	fmt.Println("\nOptions:\n\thelp\tDisplay this message\n\tlock\tLock directory/file\n\tunlock\tUnlock file/directory\n\tlicense\tDisplay license")
-	fmt.Println("\nArguments:\n\t--debug <true/false>\tShow debug messages\n\t--default-config\tUse default config")
+	fmt.Println("\nArguments:\n\t--debug\tShow debug messages")
 }
 
 func fileExists(filename string) bool {
@@ -28,10 +28,19 @@ func fileExists(filename string) bool {
 	return !info.IsDir()
 }
 
+var debug bool = false
+
 func main() {
-	log.SetOutput(ioutil.Discard)
 	//if option is passed do something, if not return help
-	if len(os.Args) > 2 {
+	if(len(os.Args) > 2){
+		if(len(os.Args) > 3){
+			if(os.Args[1]=="--debug"){
+				debug = true
+			}
+		}
+		if(!debug){
+			log.SetOutput(ioutil.Discard)
+		}
 		//filename = last args
 		var filename string = os.Args[len(os.Args)-1]
 		//check if filename is existing file
@@ -53,7 +62,7 @@ func main() {
 			password := []byte(password32[:])
 
 			// fmt.Print(password)
-			switch os.Args[1] {
+			switch os.Args[len(os.Args)-2] {
 			case "lock":
 				log.Print("Going to lock func 1")
 				lock(filename, password)
