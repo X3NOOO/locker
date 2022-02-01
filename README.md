@@ -48,5 +48,5 @@ https://user-images.githubusercontent.com/48159366/151880905-26bed182-4fb2-494b-
 - [X] encryption
 - [X] dir encryption
 - [X] `--debug` flag
-- [X] support of larger files (currently locker cannot lock files bigger than few KB of random data)
+- [X] support of larger files 
 - [ ] windows support
