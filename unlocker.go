@@ -141,7 +141,6 @@ func addrw(filename string){
 }
 
 func unlock(filename string, password []byte) {
-	log.SetOutput(ioutil.Discard)
 	log.Println("path: " + filename)
 	addrw(filename)
 	decrypt(filename, password)
