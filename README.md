@@ -16,7 +16,7 @@ https://user-images.githubusercontent.com/48159366/151880905-26bed182-4fb2-494b-
 
 ## features
 
-- Every installation have randomized master password. Even if someone copies your files they will not be able to unlock them.
+- Every installation have randomized master password. Even if someone can copy your files they will not be able to unlock them
 - Files are tared before encryption so you can lock the folder as well
 
 ## installation
