@@ -2,15 +2,17 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"io/ioutil"
+	"log"
+
 	//"bufio"
 	"crypto/sha256"
 	"os"
-	"golang.org/x/term"	//TODO uncomment
-	"syscall"			//
-	"os/exec"
-	"strings"
+	"syscall" //
+
+	"golang.org/x/term" //TODO uncomment
+	// "os/exec"
+	// "strings"
 )
 
 
@@ -33,13 +35,6 @@ func fileExists(filename string) bool {
 var debug bool = false
 
 func main() {
-	//TODO disable open files limit this is TEMPORARY solution and should by fixed
-	c, b := exec.Command("bash", "-c", "ulimit -n"), new(strings.Builder)
-	c.Stdout = b
-	c.Run()
-	ulimit := b.String()
-	
-	//if option is passed do something, if not return help
 	if(len(os.Args) > 2){
 		if(len(os.Args) > 3){
 			if(os.Args[1]=="--debug"){
@@ -59,7 +54,7 @@ func main() {
 			fmt.Printf("Enter password to %s: ", filename)													//
 			userpass, err := term.ReadPassword(int(syscall.Stdin));											//
 			if(err != nil){																					//
-				log.Fatal(err)																					//TODO uncomment for release
+				fmt.Fprintln(os.Stderr, err)																			//TODO uncomment for release
 			}																								//
 			fmt.Print("\n")
 			// fmt.Print(userpass)
@@ -82,15 +77,14 @@ func main() {
 				break
 			}
 		} else {
-			log.Fatalf("%s does not exist or it's not a file", filename)
+			fmt.Fprintln(os.Stderr, string(filename), "does not exist")
 		}
 	} else if len(os.Args) == 1 {
 		fmt.Print(hello)
-		fmt.Println("For more information type \"locker help\"")
+		fmt.Print("For more information type \"locker help\"")
 	} else if(os.Args[1] == "license"){
 		fmt.Println(license)
 	} else {
 		help()
 	}
-	exec.Command("bash", "-c", string("ulimit -n " + ulimit))
 }

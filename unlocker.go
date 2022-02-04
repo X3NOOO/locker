@@ -21,7 +21,7 @@ func removePadding(data []byte) []byte {
 	padLen := int(data[length-1])
 
 	if length < padLen {
-		log.Fatal("invalid unpadding length")
+		fmt.Fprintln(os.Stderr, "invalid unpadding length")
 	}
 	return (data[:(length - padLen)])
 }
@@ -30,23 +30,23 @@ func decrypt(filename string, password []byte) {
 	encrypted, err := ioutil.ReadFile(filename)
 	//verification of signature
 	if string(encrypted[:len(signature)]) != signature {
-		log.Fatal("Signature is invalid")
+		fmt.Fprintln(os.Stderr, "Signature is invalid")
 	}
 	encrypted = encrypted[len(signature):]
 	if err != nil {
-		log.Fatal(err)
+		fmt.Fprintln(os.Stderr, err)
 	}
 	log.Print("file data: ", string(encrypted))
 
 	aesDec, err := aes.NewCipher(password)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Fprintln(os.Stderr, err)
 	}
 	if len(encrypted)%aesDec.BlockSize() != 0 {
-		log.Fatal("invalid encrypted data")
+		fmt.Fprintln(os.Stderr, "invalid encrypted data")
 	}
 	if len(encrypted) < 1 {
-		log.Fatal("encrypted data cannot be < 1")
+		fmt.Fprintln(os.Stderr, "encrypted data cannot be < 1")
 	}
 	//decrypt data
 	var decrypted []byte
@@ -61,62 +61,62 @@ func decrypt(filename string, password []byte) {
 	// decrypted =
 	f, err := os.OpenFile(string(filename+".locker.unlock"), os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Fprintln(os.Stderr, err)
 	}
 	defer f.Close()
 	//write data
 	if _, err = f.WriteString(string(decrypted)); err != nil {
-		log.Fatal(err)
+		fmt.Fprintln(os.Stderr, err)
 	}
 }
 
 func untar(filename string) {
 	tarFile, err := os.Open(filename)
-	if(err != nil){
-		log.Fatal("error while opening decrypted file: ", err)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "error while opening decrypted file: ", err)
 	}
 	gr, err := gzip.NewReader(tarFile)
-	if(err != nil){
-		log.Fatal("error while creating gzip reader: ", err)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "error while creating gzip reader: ", err)
 	}
 	tr := tar.NewReader(gr)
 
 	for true {
 		header, err := tr.Next()
-		if(err == io.EOF){
+		if err == io.EOF {
 			break
 		}
-		if(err != nil){
-			log.Fatal("error while getting tar header: ", err)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "error while getting tar header: ", err)
 		}
 
 		comp := header.Name
 
-		if(comp == "" || strings.Contains(comp, `\`) || strings.HasPrefix(comp, "/") || strings.Contains(comp, "../")){
+		if comp == "" || strings.Contains(comp, `\`) || strings.HasPrefix(comp, "/") || strings.Contains(comp, "../") {
 			fmt.Println("WARNING: tared file contains invalid path: " + comp)
 			fmt.Println("Would you like to unpack data anyway? (y/N): ")
 			var out string
 			fmt.Scanln(&out)
-			if(out != "y"){
-				log.Fatal("exited program to avoid unpacking unwanted file")
+			if out != "y" {
+				fmt.Fprintln(os.Stderr, "exited program to avoid unpacking unwanted file")
 			}
 		}
 		comp = filepath.ToSlash(comp)
 
-		if(header.Typeflag == tar.TypeDir){
+		if header.Typeflag == tar.TypeDir {
 			err := os.MkdirAll(comp, 0744)
-			if(err != nil){
-				log.Fatal("error while unpacking directory: ", err)
+			if err != nil {
+				fmt.Fprintln(os.Stderr, "error while unpacking directory: ", err)
 			}
-		}else if(header.Typeflag == tar.TypeReg){
+		} else if header.Typeflag == tar.TypeReg {
 			writer, err := os.Create(comp)
-			if(err != nil){
-				log.Fatal("error while creating file: ", err)
+			if err != nil {
+				fmt.Fprintln(os.Stderr, "error while creating file: ", err)
 			}
 
 			_, err = io.Copy(writer, tr)
-			if(err != nil){
-				log.Fatal("error while writing untared file: ", err)
+			if err != nil {
+				fmt.Fprintln(os.Stderr, "error while writing untared file: ", err)
 			}
 			writer.Close()
 			os.Chmod(comp, os.FileMode(header.Mode))
@@ -128,14 +128,14 @@ func removeEnc(filename string) {
 	fmt.Print("Would you like to remove encrypted version? (Y/n): ")
 	var out string
 	fmt.Scanln(&out)
-	if(out != "n"){
+	if out != "n" {
 		log.Print("removing " + filename)
 		addrw(filename)
 		os.RemoveAll(filename)
 	}
 }
 
-func addrw(filename string){
+func addrw(filename string) {
 	log.Print("adding rw perms to " + filename)
 	os.Chmod(filename, 0644)
 }
@@ -144,8 +144,8 @@ func unlock(filename string, password []byte) {
 	log.Println("path: " + filename)
 	addrw(filename)
 	decrypt(filename, password)
-	untar(string(filename+".locker.unlock"))
-	os.RemoveAll(string(filename+".locker.unlock"))
+	untar(string(filename + ".locker.unlock"))
+	os.RemoveAll(string(filename + ".locker.unlock"))
 	removeEnc(filename)
 	os.Chmod(filename[:len(".locker")], 0744)
 	// getInfo(filename)

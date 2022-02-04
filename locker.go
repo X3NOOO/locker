@@ -32,7 +32,7 @@ func getMod(filename string) fs.FileMode {
 	//get file's current mode for restoring in while unlocking
 	var stats, err = os.Stat(filename)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Fprintln(os.Stderr, err)
 	}
 	oldMode := stats.Mode().Perm()
 	log.Printf("filemode: %s", oldMode)
@@ -49,12 +49,12 @@ func padding(data []byte, blockSize int) []byte {
 func tarData(filename string) string {
 	fi, err := os.Stat(filename)
 	if err != nil {
-		log.Fatal("error while getting file info: ", err)
+		fmt.Fprintln(os.Stderr, "error while getting file info: ", err)
 	}
 	tarName := string(filename + ".tar.gz.locker")
 	tarFile, err := os.Create(tarName)
 	if err != nil {
-		log.Fatal("error while creating tar file: ", err)
+		fmt.Fprintln(os.Stderr, "error while creating tar file: ", err)
 	}
 	defer tarFile.Close()
 	//create tar ang gzip writers
@@ -68,19 +68,19 @@ func tarData(filename string) string {
 		log.Print(filename, " is a file")
 		header, err := tar.FileInfoHeader(fi, filename)
 		if err != nil {
-			log.Fatal("error while getting tar header: ", err)
+			fmt.Fprintln(os.Stderr, "error while getting tar header: ", err)
 		}
 		err = tw.WriteHeader(header)
 		if err != nil {
-			log.Fatal("error while writing tar header: ", err)
+			fmt.Fprintln(os.Stderr, "error while writing tar header: ", err)
 		}
 		tmp, err := os.Open(filename)
 		if err != nil {
-			log.Fatal("error while opening file for writing tar: ", err)
+			fmt.Fprintln(os.Stderr, "error while opening file for writing tar: ", err)
 		}
 		_, err = io.Copy(tw, tmp)
 		if err != nil {
-			log.Fatal("error while copying file to tar: ", err)
+			fmt.Fprintln(os.Stderr, "error while copying file to tar: ", err)
 		}
 		tmp.Close()
 	} else if fi.Mode().IsDir() {
@@ -88,29 +88,29 @@ func tarData(filename string) string {
 		filepath.Walk(filename, func(file string, fi os.FileInfo, err error) error {
 			header, err := tar.FileInfoHeader(fi, file)
 			if err != nil {
-				log.Fatal("error while getting tar header: ", err)
+				fmt.Fprintln(os.Stderr, "error while getting tar header: ", err)
 			}
 			header.Name = filepath.ToSlash(file)
 			log.Print("filepath to file in tar: ", header.Name)
 			err = tw.WriteHeader(header)
 			if err != nil {
-				log.Fatal("error while writing header: ", err)
+				fmt.Fprintln(os.Stderr, "error while writing header: ", err)
 			}
 			if !fi.IsDir() {
 				data, err := os.Open(file)
 				if err != nil {
-					log.Fatal("error while opening file: ", err)
+					fmt.Fprintln(os.Stderr, "error while opening file: ", err)
 				}
 				_, err = io.Copy(tw, data)
 				if err != nil {
-					log.Fatal("error while copying file: ", err)
+					fmt.Fprintln(os.Stderr, "error while copying file: ", err)
 				}
 				data.Close()
 			}
 			return (nil)
 		})
 	} else {
-		log.Fatal("cannot recognize file type")
+		fmt.Fprintln(os.Stderr, "cannot recognize file type")
 	}
 	return (tarName)
 }
@@ -123,13 +123,13 @@ func pause() {
 func encrypt(filename string, key []byte) {
 	// fi, err := os.Stat(filename)
 	// if(err != nil){
-	// log.Fatal("error while getting file info: ", err)
+	// fmt.Fprintln(os.Stderr, "error while getting file info: ", err)
 	// }
 	//read file to file
 	//log.Printf("Reading %s to file", filename)
 	// file, err := ioutil.ReadFile(filename)
 	// if(err != nil){
-	// 	log.Fatal("error while reading file: ", err)
+	// 	fmt.Fprintln(os.Stderr, "error while reading file: ", err)
 	// }
 	// log.Print("file data: ", string(file))
 	///tar file
@@ -138,12 +138,12 @@ func encrypt(filename string, key []byte) {
 	//read file from filename as fileData, tar data, encrypt it with aes with password key
 	aesBlock, err := aes.NewCipher(key)
 	if err != nil {
-		log.Fatal("error while creating aescipher: ", err)
+		fmt.Fprintln(os.Stderr, "error while creating aescipher: ", err)
 	}
 	file, err := ioutil.ReadFile(filename)
 	// log.Printf("tared file: %x", file)
 	if err != nil {
-		log.Fatal("error while reading tared file: ", err)
+		fmt.Fprintln(os.Stderr, "error while reading tared file: ", err)
 	}
 	// fileData = padded file
 	fileData := padding(file, aesBlock.BlockSize())
@@ -158,7 +158,7 @@ func encrypt(filename string, key []byte) {
 			aesBlock.Encrypt(tmpData, fileData[index:index+aesBlock.BlockSize()])
 			f, err := os.OpenFile(string(filename+"."+strconv.Itoa(i)), os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
 			if err != nil {
-				log.Fatal(err)
+				fmt.Fprintln(os.Stderr, err)
 			}
 			//encrypted = append(encrypted, tmpData...)
 			//write encrypted block to {filename}.locker.{i}
@@ -166,13 +166,13 @@ func encrypt(filename string, key []byte) {
 			//write signature
 			if index == 0 {
 				if _, err = f.WriteString(signature); err != nil {
-					log.Fatal(err)
+					fmt.Fprintln(os.Stderr, err)
 				}
 			}
 
 			//write data
 			if _, err = f.WriteString(string(tmpData)); err != nil {
-				log.Fatal(err)
+				fmt.Fprintln(os.Stderr, err)
 			}
 			f.Close()
 		}
@@ -197,22 +197,22 @@ func verifyEnc(filename string) {
 		tmp := sha1.Sum(file)
 		if i == 1 {
 			oldHash = tmp
-			} else {
-				if oldHash != tmp {
-					log.Fatal("error while verification of encrypted files: files are different")
-				}
+		} else {
+			if oldHash != tmp {
+				fmt.Fprintln(os.Stderr, "error while verification of encrypted files: files are different")
 			}
 		}
-		log.Print("output files are the same")
 	}
-	
+	log.Print("output files are the same")
+}
+
 func removeCopies(filename string, start bool, originalName string) {
 	log.Print("originalName: " + originalName)
 	if start {
 		for i := 2; i <= verifyData; i++ {
 			err := os.Remove(filename + "." + strconv.Itoa(i))
 			if err != nil {
-				log.Fatal("error while removing copies: ", err)
+				fmt.Fprintln(os.Stderr, "error while removing copies: ", err)
 			}
 			os.Rename(filename+".1", filename+".locker")
 		}
@@ -223,7 +223,7 @@ func removeCopies(filename string, start bool, originalName string) {
 	fmt.Scanln(&out)
 	log.Print("replace out: ", out)
 	// fmt.Print(filename)
-	if string(out) == "y" || string(out) == "Y"{
+	if string(out) == "y" || string(out) == "Y" {
 		// os.Remove(filename)
 		os.RemoveAll(originalName)
 		os.Rename(filename+".locker", originalName)
@@ -231,10 +231,10 @@ func removeCopies(filename string, start bool, originalName string) {
 	} else {
 		os.Rename(filename+".locker", originalName+".locker")
 		changeMod(filename + ".locker")
-	
+
 		fmt.Print("Would you like to remove original file? (Y/n): ")
 		fmt.Scanln(&out)
-		if(out != "n"){
+		if out != "n" {
 			log.Print("removing " + originalName)
 			os.Chmod(originalName, 0777)
 			os.RemoveAll(originalName)
