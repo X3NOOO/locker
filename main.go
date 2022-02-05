@@ -81,7 +81,7 @@ func main() {
 		}
 	} else if len(os.Args) == 1 {
 		fmt.Print(hello)
-		fmt.Print("For more information type \"locker help\"")
+		fmt.Println("For more information type \"locker help\"")
 	} else if(os.Args[1] == "license"){
 		fmt.Println(license)
 	} else {

@@ -12,7 +12,7 @@
 
 locker is cli program for locking files and folders.
 
-https://user-images.githubusercontent.com/48159366/151880905-26bed182-4fb2-494b-ba1b-340bbe856632.mov
+https://user-images.githubusercontent.com/48159366/152652453-db94ba00-0ab6-4a44-abdf-cf044b07ca34.mp4
 
 ## features
 
