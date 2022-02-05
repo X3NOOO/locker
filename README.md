@@ -49,4 +49,4 @@ https://user-images.githubusercontent.com/48159366/151880905-26bed182-4fb2-494b-
 - [X] dir encryption
 - [X] `--debug` flag
 - [X] support of larger files
-- [ ] windows support
+- [ ] (it's working on wine, but hey, it's wine, so i'm not marking it as working) windows support
