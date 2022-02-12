@@ -21,9 +21,9 @@ release:
         go run salt.go u 64 values.go
 
 windows:
-	mkdir bin; \
-        go run salt.go l 64 values.go; \
-	GOOS=windows go build -o .\bin\locker.exe .\locker.go .\main.go .\unlocker.go .\values.go; \
+	mkdir "bin" && \
+        go run salt.go l 64 values.go && \
+	go build -o ".\bin\locker.exe" ".\locker.go" ".\main.go" ".\unlocker.go" ".\values.go" && \
         go run salt.go u 64 values.go
 
 install:
